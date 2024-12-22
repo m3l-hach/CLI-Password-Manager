@@ -19,3 +19,14 @@ def get_user_choice(options):
 				print("Invalid choice, try again: ")
 		except ValueError:
 				print("Please enter a valid number")
+
+def exit_program():
+	print("Are you sure you want to quit?")
+	print("1) yes")
+	print("2) no")
+	choice = get_user_choice([1, 2])
+	if choice == 1:
+		clear_screen()
+		exit()
+	else:
+		pass
