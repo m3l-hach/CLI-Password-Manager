@@ -11,10 +11,12 @@ pass_tab_menu = menu.Menu("pass_tab_menu", menu.menu_titles, menu.menu_content, 
 current_menu = main_menu
 
 while current_menu:
-	if not pass_storage.render_db():
-		pass
+	rendered_db = pass_storage.render_db()
+	if rendered_db:
+		pass_tab_menu.content = rendered_db
 	else:
-		pass_tab_menu.content = pass_storage.render_db()
+		pass_tab_menu.content = "Here you can see all your saved passwords"
+
 	choice = current_menu.display_menu()
 
 	if current_menu == main_menu:
@@ -31,6 +33,8 @@ while current_menu:
 			current_menu = main_menu
 	elif current_menu == pass_tab_menu:
 		if choice == 1:
-			pass_storage.add_passwords()
+			pass_storage.add_password()
+		elif choice ==2:
+			pass_storage.del_password()
 		elif choice == 3:
 			current_menu = main_menu

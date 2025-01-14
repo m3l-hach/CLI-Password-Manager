@@ -107,7 +107,8 @@ class Menu:
 	def display_content(self):
 		print("\n")
 		size = helpers.get_terminal_size()
-		print(self.content.center(size.columns))
+		for line in self.content.splitlines():
+			print(line.center(size.columns))
 		print("\n")
 
 	def display_options_get_choice(self):
