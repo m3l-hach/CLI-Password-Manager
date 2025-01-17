@@ -2,6 +2,7 @@ import sqlite3
 from tabulate import tabulate
 import time
 from helpers import get_user_choice
+import pass_encryption
 
 def init_db():
 	conn = sqlite3.connect('passwords.db')
@@ -20,16 +21,17 @@ def init_db():
 
 init_db()
 
-def render_db():
+def render_db(key):
 	conn = sqlite3.connect('passwords.db')
 	cursor = conn.cursor()
 	cursor.execute("SELECT * FROM passwords")
 	pass_table = cursor.fetchall()
+	decrypted_pass_table = [(row[0], row[1], pass_encryption.decrypt_data(key, row[2])) for row in pass_table]
 	conn.close()
 	if not pass_table:
 		return None
 	headers = ["Service", "Username", "Password"]
-	table_str = tabulate(pass_table, headers, tablefmt="grid")
+	table_str = tabulate(decrypted_pass_table, headers, tablefmt="grid")
 	return table_str
 
 def	get_services():
@@ -40,7 +42,7 @@ def	get_services():
 	services_list = [row[0] for row in services]
 	return services_list
 
-def add_password():
+def add_password(key):
 	services_list = get_services()
 	while True:
 		service = input("Enter the service name (e.g., Gmail): ")
@@ -54,17 +56,19 @@ def add_password():
 	while True:
 		password = input("Enter the password (cannot be blank): ")
 		if password.strip():
+			encrypted_password = pass_encryption.encrypt_data(key, password)
 			break
 		print("Password cannot be blank. Please enter a valid password.")
 
 	conn = sqlite3.connect('passwords.db')
 	cursor = conn.cursor()
-	cursor.execute("INSERT INTO passwords (service, username, password) VALUES (?, ?, ?)", (service, username, password))
+	cursor.execute("INSERT INTO passwords (service, username, password) VALUES (?, ?, ?)", (service, username, encrypted_password))
 	conn.commit()
 	conn.close()
 
 	print(f"\033[1mPassword for {service} saved successfully.\033[0m")
 	time.sleep(2)
+
 def	validate_deletion(choice):
 	print(f"Are you sure you want to delete \033[1m{choice}\033[0m password?")
 	print("1) yes")
@@ -74,6 +78,7 @@ def	validate_deletion(choice):
 		return 1
 	else:
 		return 2
+
 def del_password():
 	services_list = get_services()
 	if not services_list:

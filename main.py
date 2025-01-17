@@ -2,16 +2,17 @@ import menu
 import pass_storage
 from helpers import exit_program
 from pass_gen import generate_pass
+from pass_encryption import start_program
 
 main_menu = menu.Menu("main_menu", menu.menu_titles, menu.menu_content, menu.menu_options)
 pass_gen_menu = menu.Menu("pass_gen_menu", menu.menu_titles, menu.menu_content, menu.menu_options)
 pass_tab_menu = menu.Menu("pass_tab_menu", menu.menu_titles, menu.menu_content, menu.menu_options)
 
-
+key = start_program()
 current_menu = main_menu
 
 while current_menu:
-	rendered_db = pass_storage.render_db()
+	rendered_db = pass_storage.render_db(key)
 	if rendered_db:
 		pass_tab_menu.content = rendered_db
 	else:
@@ -33,7 +34,7 @@ while current_menu:
 			current_menu = main_menu
 	elif current_menu == pass_tab_menu:
 		if choice == 1:
-			pass_storage.add_password()
+			pass_storage.add_password(key)
 		elif choice ==2:
 			pass_storage.del_password()
 		elif choice == 3:
