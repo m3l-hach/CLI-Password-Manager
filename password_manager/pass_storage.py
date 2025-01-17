@@ -3,9 +3,10 @@ from tabulate import tabulate
 import time
 from helpers import get_user_choice
 import pass_encryption
+from config import DB_FILE
 
 def init_db():
-	conn = sqlite3.connect('passwords.db')
+	conn = sqlite3.connect(DB_FILE)
 	cursor = conn.cursor()
 
 	cursor.execute("""
@@ -22,7 +23,7 @@ def init_db():
 init_db()
 
 def render_db(key):
-	conn = sqlite3.connect('passwords.db')
+	conn = sqlite3.connect(DB_FILE)
 	cursor = conn.cursor()
 	cursor.execute("SELECT * FROM passwords")
 	pass_table = cursor.fetchall()
@@ -35,7 +36,7 @@ def render_db(key):
 	return table_str
 
 def	get_services():
-	conn = sqlite3.connect('passwords.db')
+	conn = sqlite3.connect(DB_FILE)
 	cursor = conn.cursor()
 	cursor.execute("SELECT service FROM passwords")
 	services = cursor.fetchall()
@@ -60,7 +61,7 @@ def add_password(key):
 			break
 		print("Password cannot be blank. Please enter a valid password.")
 
-	conn = sqlite3.connect('passwords.db')
+	conn = sqlite3.connect(DB_FILE)
 	cursor = conn.cursor()
 	cursor.execute("INSERT INTO passwords (service, username, password) VALUES (?, ?, ?)", (service, username, encrypted_password))
 	conn.commit()
@@ -89,7 +90,7 @@ def del_password():
 			choice = input("Enter the service's name of the password to delete: ")
 			if choice in services_list:
 				if validate_deletion(choice) == 1:
-					conn = sqlite3.connect('passwords.db')
+					conn = sqlite3.connect(DB_FILE)
 					cursor = conn.cursor()
 					cursor.execute("DELETE FROM passwords WHERE service = (?)", (choice,))
 					conn.commit()

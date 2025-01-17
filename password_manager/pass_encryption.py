@@ -4,14 +4,16 @@ from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 from cryptography.fernet import Fernet
 from base64 import urlsafe_b64encode
+from config import SALT_FILE
+from config import PASSWORD_FILE
 
 def	get_salt():
-	if not os.path.exists("salt.bin"):
-		with open("salt.bin", "wb") as f:
+	if not os.path.exists(SALT_FILE):
+		with open(SALT_FILE, "wb") as f:
 			salt = os.urandom(16)
 			f.write(salt)
 	else:
-		with open("salt.bin", "rb") as f:
+		with open(SALT_FILE, "rb") as f:
 			salt = f.read()
 	return salt
 
@@ -43,16 +45,16 @@ def	create_master_password():
 			iterations=1000000
 		)
 		hashed_password = urlsafe_b64encode(kdf.derive(master_password.encode()))
-		with open("master.hash", "wb") as f:
+		with open(PASSWORD_FILE, "wb") as f:
 			f.write(salt + b"\n" + hashed_password)
 		break
 
 def verify_master_password():
-	if not os.path.exists("master.hash"):
+	if not os.path.exists(PASSWORD_FILE):
 		print("No master password found. let's create one.")
 		create_master_password()
 	
-	with open("master.hash", "rb") as f:
+	with open(PASSWORD_FILE, "rb") as f:
 		lines = f.readlines()
 		salt = lines[0].strip()
 		stored_hashed_pass = lines[1].strip()

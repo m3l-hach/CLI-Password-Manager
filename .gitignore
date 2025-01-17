@@ -1,14 +1,7 @@
-# Ignore Python cache files
-__pycache__/
+venv/
 *.pyc
+__pycache__/
+dist/
+build/
+*.spec
 
-# Ignore environment files
-.env
-
-# Ignore temporary files
-*.log
-*.tmp
-
-# Ignore IDE files
-.vscode/
-.idea/
