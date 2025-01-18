@@ -23,7 +23,7 @@ A command-line-based Password Manager built with Python, designed for secure pas
 ### Prerequisites
 
 Ensure you have the following installed:
-- Python 3.8 or higher
+- `Python 3.8` or higher
 - `pip` (Python package manager)
 - `venv` module (usually included with Python, but ensure it is installed if missing)
 
@@ -37,7 +37,7 @@ Ensure you have the following installed:
 
 2. **Create a virtual environment and install dependencies**:
    ```bash
-   python -m venv venv
+   python3 -m venv venv
    source venv/bin/activate  # On Windows: venv\Scripts\activate
    pip install -r requirements.txt
    ```
