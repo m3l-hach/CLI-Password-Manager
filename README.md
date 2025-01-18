@@ -31,8 +31,8 @@ Ensure you have the following installed:
 
 1. **Clone the repository**:
    ```bash
-   git clone <repository-url>
-   cd <repository-folder>
+   git clone https://github.com/m3l-hach/CLI-Password-Manager.git
+   cd CLI-Password-Manager
    ```
 
 2. **Create a virtual environment and install dependencies**:
