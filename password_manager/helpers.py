@@ -1,4 +1,5 @@
 import os
+import sys
 
 def get_terminal_size():
 	try:
@@ -27,6 +28,6 @@ def exit_program():
 	choice = get_user_choice([1, 2])
 	if choice == 1:
 		clear_screen()
-		exit()
+		sys.exit()
 	else:
 		pass
